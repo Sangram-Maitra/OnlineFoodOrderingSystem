@@ -1,4 +1,21 @@
 <%- include("header") -%> 
     <%- include("navbar") -%> 
-    <h1>This Is Home Page</h1>
+    <h1 class="c-greet">WELCOME</h1>
+    <h1 class="c-greet"> <%= Name %> </h1>
+    <% for(i=0;i<size;i++){ %>
+        <div class="container text-center">
+                    <div class="col">
+                        <form class="c-form" action="/addingTocart" method="post">
+                            <img src="..." alt="...">
+                            <!-- <p name="PName" value="heeee">foodDetails[i].Name</p> -->
+                            <!-- <p class="c-home">foodDetails[i].Name </p> -->
+                            <input class="c-home form-control form-control-plaintext"  type="text" name="PText" value="<%= foodDetails[i].Name %>" readonly>
+                            <p class="c-home">Price is:</p>
+                            <input class="c-home form-control form-control-plaintext"  type="number" name="PPrice" value="<%= foodDetails[i].Price %>" readonly>
+                            <button class="btn btn-xl">Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div> 
+                <% }; %>
 <%- include("footer") -%> 

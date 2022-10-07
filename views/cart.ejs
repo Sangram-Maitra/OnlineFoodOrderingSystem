@@ -1,0 +1,22 @@
+<%- include("header") -%> 
+    <%- include("navbar") -%> 
+    <form action="/invoice" method="post">
+        <% for(i=0;i<num;i++){ %>
+            <div class="container text-center">
+                <% if(i%2==0) {%>
+                    <div class="row-6">
+                        <% } %>
+                        <div class="col">
+                            <img src="..." alt="...">
+                            <input class="c-home form-control form-control-plaintext"  type="text" name="PText" value="<%= foodDetails[i].Name %>" readonly>
+                            <!-- <p class="c-home">Price is:</p> -->
+                            <input class="c-home form-control form-control-plaintext"  type="number" name="PPrice" value="<%= foodDetails[i].Price %>" readonly>
+                            <!-- <button class="btn btn-xl">Add</button> -->
+                        </div>
+                    </div>
+                </div> 
+                    <% }; %>
+            <h1>Total Cost is: <%= Total %> </h1>
+        <button class="btn btn-xl" >Payment</button>
+    </form>
+<%- include("footer") -%> 

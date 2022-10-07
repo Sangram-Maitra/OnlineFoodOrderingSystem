@@ -1,39 +1,27 @@
 <%- include("header") -%> 
     <form action="/signingUp" method="post">
-        <div class="form-floating mb-3 c-Div">  
-            <label class="lab" for="Fname">First Name</label>
+        <div class="row mb-3 c-Div">  
+            <label class="tex animation" for="Fname">First Name</label>
             <input type="text" name="First_Name" class="form-control tex" id="Fname" required="required" placeholder="First Name">
         </div>
-        <div class="form-floating mb-3 c-Div"> 
-            <label class="lab" for="Lname">Last Name</label>
+        <div class="row  mb-3 c-Div"> 
+            <label class="tex animation" for="Lname">Last Name</label>
             <input type="text" name="Last_Name" class="form-control tex" id="Lname" required="required" placeholder="Last name">
         </div>
-        <div class="form-floating mb-3 c-Div">
-            <label class="lab" for="phNo">Phone</label>
+        <div class="row mb-3 c-Div">
+            <label class="tex animation" for="phNo">Phone</label>
             <input type="text" name="Phone" class="form-control tex" id="phNo" required="required" placeholder="PhoneNumber">
         </div>
-        <div class="form-floating mb-3 c-Div">
-            <label class="lab" for="Add">Address</label>
+        <div class="row mb-3 c-Div">
+            <label class="tex animation" for="Add">Address</label>
             <input type="text" name="add" class="form-control tex" id="Add" required="required" placeholder="Address">
         </div>
-        <!-- <p>
-            <label class="lab" for="Lname">Last Name</label>
-            <input class="text" type="text" name="Last_Name" id="Lname"><br>
-        </p>
-        <p>
-            <label class="lab" for="phNo">Phone Number</label>
-            <input class="text" type="text" name="Phone" id="phNo"><br>
-        </p>
-        <p>
-            <label class="lab" for="Add">Address</label>
-            <input class="text" type="text" name="add" id="Add"><br>
-        </p> -->
             <button class="btn btn-xl">Submit</button>
     </form>
     <form action="/signIn" method="post">
-        <p class="tex c-par">Already Have An Account
+        <p class="c-par">Already Have An Account
         </p>
-        <p class="c-par c-par2">No Problemo. . . Make your GF Wait But Not your TUMMY ❤ </p>
+        <p class="c-par2">No Problemo. . . Make your GF Wait But Not your TUMMY ❤ </p>
         <button class="btn btn-xl">Sign In</button>
     </form>
 <%- include("footer") -%> 
