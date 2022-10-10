@@ -17,4 +17,7 @@ For run the code
   nodemon app.js  or node app.js
 3.open any webBrowser and type in the urlBox localhost:3000
   
+For The database open localhost/dashboard/phpmyadmin or localhost then nevigate to phpMyadmin and there you have to first create 
+the Database "userdetails" and Tables "cart","delhi_fooddb","fooddb","users","invoices" as the datas are stored in local. >.<
 
+IF YOU GUYS WANT TO CHANGE ANY PART PLEASE FEEL FREE TO DO SO AND DO A PULL REQUEST 😊
