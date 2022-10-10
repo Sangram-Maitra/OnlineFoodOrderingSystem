@@ -3,8 +3,11 @@ const bodyparser = require("body-parser");
 const { urlencoded } = require("body-parser");
 const mysql = require("mysql");
 // const foodList = [];
-var UserName="";
-var TotalCost=0;
+var UserFirstName="";
+var UserLastName="";
+var TotalCost = 0;
+var number = 0;
+var UserAddress = "";
 
 
 const app = express();
@@ -69,7 +72,7 @@ app.get("/home", function (req, res) {
       //   console.log(result[i].Name);
       // };
       
-      res.render("home", { title: "Home Page",foodDetails: result, size: length, Name:UserName });
+      res.render("home", { title: "Home Page",foodDetails: result, size: length, Name:UserFirstName });
       // res.render("home", { title: "Home Page"});
     });
 });
@@ -94,12 +97,13 @@ app.get("/cart",function(req,res){
       //   console.log(result[i].Name);
       // };
       var data = JSON.parse(JSON.stringify(result));
+      TotalCost=0;
       for(i=0;i<data.length;i++)
       {
         TotalCost+=data[i].Price;
       }
       // console.log(TotalCost);
-      res.render("cart", { title: "Shopping Cart",foodDetails: result, num: length, Name:UserName,Total:TotalCost });
+      res.render("cart", { title: "Shopping Cart",foodDetails: result, num: length, Name:UserFirstName,Total:TotalCost });
       // res.render("home", { title: "Home Page"});
     });
   // res.render("cart",{ title: "Shopping Cart" })
@@ -107,7 +111,30 @@ app.get("/cart",function(req,res){
 
 app.get("/error",function(req,res){
   res.render("error",{ title: "Error" });
-  res.redirect("/");
+  // res.redirect("/");
+})
+
+app.get("/profile",(req,res)=>{
+  let sql = `select * from users where PHONENUMBER = '${number}'`;
+  db.query(sql, function (err, result1, fields) 
+    {
+      if (err) throw err;
+      var data1 = JSON.parse(JSON.stringify(result1));
+      console.log(data1);
+      UserFirstName = data1[0].FName;
+      UserLastName = data1[0].LName;
+      number = data1[0].PhoneNumber;
+      UserAddress = data1[0].Address;
+
+      // res.render("home", { title: "Home Page"});
+    });
+    let sql2 = `select * from invoice where PhoneNumber = '${number}'`;
+    db.query(sql2, function (err, result2, fields){
+      var length = Object.keys(result2).length;
+      var data2= JSON.parse(JSON.stringify(result2));
+
+      res.render("profile", { title: "Profile",Name:UserFirstName, Lname: UserLastName, Addr: UserAddress,PhoneNum:number,size:length,invoices:data2 });
+    });
 })
 
 //post Requests
@@ -117,6 +144,8 @@ app.post("/signingUp",function(req,res){
     var Lname = req.body.Last_Name;
     var PhoneNumber = req.body.Phone;
     var Address = req.body.add;
+    UserFirstName= Fname;
+    number=PhoneNumber;
     // if(Fname.length!=null)
     // {
     //     if(Lname.length!=null)
@@ -156,7 +185,21 @@ app.post("/signingUp",function(req,res){
 })
 
 app.post("/done",(req,res)=>{
-  TotalCost=0;
+    var d = new Date();
+    var data = {
+      PhoneNumber: number,
+      Cost:TotalCost,
+      Date: d.getFullYear()+"-"+d.getMonth()+"-"+d.getDate()+" "+d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()
+    };
+    let sql2 = "insert into invoice set ?";
+      db.query(sql2, data, function (err, result) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log("Invoice inserted");
+          // res.redirect("/home");
+        }
+      });
   res.redirect("/home");
 });
 
@@ -183,8 +226,9 @@ app.post("/signingIn", function (req, res) {
         var data = JSON.parse(JSON.stringify(result));
         if(data[0]!=undefined)
         {
-          // console.log(data[0]);
-          UserName= data[0].FName;
+          console.log(data[0].PhoneNumber);
+          UserFirstName= data[0].FName;
+          number= data[0].PhoneNumber;
         }
         if(result[0]==undefined) 
         {

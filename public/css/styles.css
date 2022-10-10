@@ -263,9 +263,9 @@ input{
     background-color: transparent;
 }
 
-.c-form{
-    /* margin:0; */
-}
+/* .c-form{
+    margin:0;
+} */
 
 .animation{
     -moz-animation: slideIn 0.7s ease-out;
@@ -306,4 +306,10 @@ input{
 
 .c-navText{
     color: white!important;
+}
+
+.c-prof{
+    text-align: center !important;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif !important;
+    color:#21264B;
 }

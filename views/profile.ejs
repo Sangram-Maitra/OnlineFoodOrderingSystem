@@ -1,0 +1,25 @@
+<%- include("header") -%> 
+    <%- include("navbar2") -%> 
+    <h1 class="c-greet">WELCOME</h1>
+    <h1 class="c-greet"> <%= Name %> </h1>
+        <div class="container text-center">
+                    <div class="col">
+                        <form class="c-form" action="/addingTocart" method="post">
+                            <h1 class="c-prof">FirstName: <%= Name %>  </h1>
+                            <h1 class="c-prof">LastName: <%= Lname %>  </h1>
+                            <h1 class="c-prof">PhoneNumber: <%= PhoneNum %>  </h1>
+                            <h1 class="c-prof">Address: <%= Addr %>  </h1>
+                        </form>
+                    </div>
+                    <div class="col">
+                        <form class="c-form" action="/addingTocart" method="post">
+                           <% for(i=0;i<size;i++) {%>
+                            <h2 class="c-prof"><%= invoices[i].Date %></h2>
+                            <h2 class="c-prof"><%= invoices[i].Cost %></h2>
+                            <% } %>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div> 
+<%- include("footer") -%> 
