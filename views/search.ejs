@@ -1,0 +1,21 @@
+<%- include("header") -%> 
+    <%- include("navbar2") -%> 
+
+    <% for(i=0;i<size;i++){ %>
+        <div class="container text-center">
+                    <div class="col">
+                        <form class="c-form" action="/addinginSearch">
+                            <img src="..." alt="Img WIll be Added">
+                            <!-- <p name="PName" value="heeee">foodDetails[i].Name</p> -->
+                            <!-- <p class="c-home">foodDetails[i].Name </p> -->
+                            <input class="c-home form-control form-control-plaintext"  type="text" name="PText" value="<%= Searchfood[i].Name %>" readonly>
+                            <p class="c-home">Price is:</p>
+                            <input class="c-home form-control form-control-plaintext"  type="number" name="PPrice" value="<%= Searchfood[i].Price %>" readonly>
+                            <button class="btn btn-xl">Add</button>
+                        </form>
+                    </div>
+                </div>
+            </div> 
+                <% }; %>
+
+<%- include("footer") -%> 

@@ -1,12 +1,19 @@
 <%- include("header") -%> 
     <%- include("navbar2") -%> 
+    <% if(SearchFailure.length>0){ %>
+        <div class="alert alert-danger"><%=SearchFailure%></div>
+    <% } %>
+    <form action="/search">
+        <input type="text" name="search" placeholder="Search Here">    
+        <button class="btn">Search</button>
+    </form>
     <h1 class="c-greet">WELCOME</h1>
     <h1 class="c-greet"> <%= Name %> </h1>
     <% for(i=0;i<size;i++){ %>
         <div class="container text-center">
                     <div class="col">
                         <form class="c-form" action="/addingTocart" method="post">
-                            <img src="..." alt="...">
+                            <img src="..." alt="Img WIll be Added">
                             <!-- <p name="PName" value="heeee">foodDetails[i].Name</p> -->
                             <!-- <p class="c-home">foodDetails[i].Name </p> -->
                             <input class="c-home form-control form-control-plaintext"  type="text" name="PText" value="<%= foodDetails[i].Name %>" readonly>

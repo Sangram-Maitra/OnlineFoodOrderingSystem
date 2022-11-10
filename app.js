@@ -2,13 +2,26 @@ const express = require("express");
 const bodyparser = require("body-parser");
 const { urlencoded } = require("body-parser");
 const mysql = require("mysql");
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+var flash = require('connect-flash');
+
+// const popup = require('popups');
 // const foodList = [];
 var UserFirstName="";
 var UserLastName="";
 var TotalCost = 0;
-var number = 0;
+var number = "";
 var UserAddress = "";
+var GlobalSearch="";
 
+
+function norProper(flag){
+  if(flag==0)
+  {
+      alert("Not proper Inputted");
+  }
+}
 
 const app = express();
 const db = mysql.createConnection({
@@ -21,6 +34,15 @@ const db = mysql.createConnection({
 app.set("view engine", "ejs");
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+
+app.use(cookieParser());
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false,maxAge: 60000 }
+})) 
+app.use(flash());
 
 //connect
 db.connect(function (err) {
@@ -57,7 +79,8 @@ app.get("/checkTable",function(req,res){
 
 //initating signup and signin page
 app.get("/", function (req, res) {
-  res.render("signup", { title: "signup" });
+  res.render("signup", { title: "signup", serverError: req.flash('server-error'),
+   F_Name: UserFirstName,L_Name: UserLastName,Phone_numb:number,AddressPlace:UserAddress});
 });
 
 app.get("/home", function (req, res) {
@@ -72,7 +95,7 @@ app.get("/home", function (req, res) {
       //   console.log(result[i].Name);
       // };
       
-      res.render("home", { title: "Home Page",foodDetails: result, size: length, Name:UserFirstName });
+      res.render("home", { title: "Home Page",foodDetails: result, size: length, Name:UserFirstName, SearchFailure: req.flash('server-error') });
       // res.render("home", { title: "Home Page"});
     });
 });
@@ -115,6 +138,7 @@ app.get("/error",function(req,res){
 })
 
 app.get("/profile",(req,res)=>{
+
   let sql = `select * from users where PHONENUMBER = '${number}'`;
   db.query(sql, function (err, result1, fields) 
     {
@@ -137,20 +161,78 @@ app.get("/profile",(req,res)=>{
     });
 })
 
+app.get("/search",(req,res)=>{
+    var nameSearching = req.query.search;
+    if(nameSearching!=undefined){
+      GlobalSearch=nameSearching;
+    }
+    var size2 ;
+    let sqlSearch = "Select * from delhi_fooddb where Name like '%" + GlobalSearch + "%'";
+    // console.log("The Name searching is: "+nameSearching);
+
+    db.query(sqlSearch,function(err,result,fields){
+      if(err)throw err;
+      if(result[0]!=undefined)
+      {
+        size2 = Object.keys(result).length;
+        var dataSearch = JSON.parse(JSON.stringify(result));
+        // console.log(dataSearch.length);
+        // console.log(dataSearch);
+        res.render("search",{title:"Search",Searchfood:dataSearch, size:size2})
+      }
+      else{
+        console.log("Food Not Present");
+        req.flash('server-error',"Food Not Present Please Try Again");
+        res.redirect("/home");
+      }
+    })
+})
+
+app.get("/addinginSearch",function(req,res){
+  console.log(req.query.PText);
+  console.log(req.query.PPrice);
+  ProductName = req.query.PText;
+  ProductPrice = req.query.PPrice;
+  // TotalCost+=ProductPrice; this way if we directly went to cart it wont show any price so its not good method
+
+  let data = {
+    Name: ProductName,
+    Price: ProductPrice    
+  };
+  let sql = "Insert into Cart set ?";
+  let query = db.query(sql, data, function (err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("data inserted");
+      res.redirect("/search");
+      // res.render("search");
+    }
+  });
+})
+
+
 //post Requests
 app.post("/signingUp",function(req,res){
-    // var flag=0;
+    var flag=0;
+    
     var Fname = req.body.First_Name;
     var Lname = req.body.Last_Name;
     var PhoneNumber = req.body.Phone;
     var Address = req.body.add;
     UserFirstName= Fname;
+    UserLastName = Lname;
+    UserAddress = Address;
     number=PhoneNumber;
     // if(Fname.length!=null)
     // {
     //     if(Lname.length!=null)
     //     {
-    //         var isNum = /^[0-9]+$/.test(PhoneNumber);
+            var isNum = /^[0-9]+$/.test(PhoneNumber);
+            if(isNum==true && PhoneNumber.length>=9)
+            {
+              flag=1;
+            }
     //         if(isNum)
     //         {
     //             if(Address.length!=null)
@@ -161,27 +243,39 @@ app.post("/signingUp",function(req,res){
     //         }   
     //     }  
     // }
-    // if(flag==0)
-    // {
-    //     console.log("Not Enough Parameter");
-    //     res.redirect("/");
-    // }
-
-  let data = {
-    FNAME: Fname,
-    LNAME: Lname,
-    PHONENUMBER: PhoneNumber,
-    ADDRESS: Address,
-  };
-  let sql = "Insert into users set ?";
-  let query = db.query(sql, data, function (err, result) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("data inserted");
-      res.redirect("/home");
+    if(flag==0)
+    {
+        req.flash('server-error',"something not properly inputted");
+     
+        console.log("Number is not proper inputted");
+        res.redirect("/");
+        // norProper(flag);
+        // popup.alert({
+        //   content: 'Number is not proper inputted'
+        // });
+        // res.redirect("/error");
+        // alert("Number is not proper ");
+        // norProper(flag);
     }
+    else{
+    let data = {
+      FNAME: Fname,
+      LNAME: Lname,
+      PHONENUMBER: PhoneNumber,
+      ADDRESS: Address,
+    };
+    
+    let sql = "Insert into users set ?";
+    let query = db.query(sql, data, function (err, result) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("data inserted");
+        // req.flash('server-success',"User added sucessfully");
+        res.redirect("/home");
+      }
   });
+}
 })
 
 app.post("/done",(req,res)=>{

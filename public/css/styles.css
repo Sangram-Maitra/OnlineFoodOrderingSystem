@@ -4,9 +4,9 @@
 body{
     height: 100%;
     font-family: 'Quicksand', sans-serif;
-    /* background: url("https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=600") no-repeat fixed; */
-    /* background: url("https://cdn.pixabay.com/photo/2017/12/10/14/47/pizza-3010062_960_720.jpg") no-repeat fixed; */
-    background: url("https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80") no-repeat fixed;
+    /* background: url("https://images.unsplash.com/photo-1606787366850-de6330128bfc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80") no-repeat fixed; */
+    background: url("foodimage3.jpg") no-repeat fixed;
+    /* background:url("foodImage.png"); */
     background-size: cover;
 }
 a:hover{
